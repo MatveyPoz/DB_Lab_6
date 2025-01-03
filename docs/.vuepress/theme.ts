@@ -9,7 +9,7 @@ export default hopeTheme({
 
   editLink: false,
   // Замінити на назву свого репозиторія
-  repo: "dimatortik/db-course-hope-template",
+  repo: "MatveyPoz/DB_Lab6",
 
   docsDir: "docs",
   // navbar
