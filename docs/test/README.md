@@ -1,4 +1,13 @@
 # Тестування працездатності системи
 
-*В цьому розділі необхідно вказати засоби тестування, навести вихідні коди тестів та результати тестування.*
+## POST /AddSurvey/
+![](create_new_survey.bmp)
 
+## GET /GetAllSurveys
+![](see_all_surveys.bmp)
+
+## PUT /Survey/\{id\}/
+![](edit_srvey.bmp)
+
+## DELETE /survey/\{id\}/
+![](delete_survey.bmp)
