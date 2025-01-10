@@ -1,22 +1,5 @@
----
-home: true
-icon: home
-title: Початок
-
-heroText: "Система організації й управління опитуваннями експертів PulseVote"
-
-tagline: Лабораторні роботи з дисципліни "Організація баз данних"
-
-actions:
-  - text: Розпочати
-    icon: lightbulb
-    link: ./intro/
-    type: primary
-
-footer: "ECL 2.0 Licensed | Copyright © [YYYY] [Your name] |"
-
----
-
+# Лабораторні роботи з дисципліни "Організація баз данних"
+## Система організації й управління опитуваннями експертів PulseVote
 
 **Виконали:** 
 
