@@ -1,0 +1,619 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Запити зацікавлених осіб</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../../toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="Запити-зацікавлених-осіб"><a class="header" href="#Запити-зацікавлених-осіб">Запити зацікавлених осіб</a></h1>
+<h2 id="Вступ"><a class="header" href="#Вступ"><span id = "introduction">Вступ</span></a></h2>
+<p>Цей документ містить опис концепцій, методів та підходів, пов'язаних із розробкою системи організації та управління опитуваннями експертів. Він охоплює ключові терміни, методології експертних опитувань, аналіз існуючих методів та підходів до вирішення завдань, а також рекомендації для створення ефективної інформаційної системи управління опитуваннями. Документ має на меті дати повне уявлення про етапи планування, проведення та аналізу експертних опитувань, враховуючи найкращі світові практики в цій сфері.</p>
+<h3 id="Мета"><a class="header" href="#Мета"><span id = "target">Мета</span></a></h3>
+<p>Метою проекту є розробка та впровадження інформаційної системи для організації та управління експертними опитуваннями. Ця система повинна полегшити процес збору, обробки та аналізу експертних оцінок для підтримки прийняття рішень у різних галузях. Основними завданнями проекту є забезпечення анонімності учасників, автоматизація багатократних раундів опитувань, статистична обробка результатів та надання інструментів для візуалізації й аналізу зібраних даних. Проект спрямований на підвищення точності, об’єктивності та зручності проведення експертних оцінок, що дозволить швидко і якісно отримувати узгоджені висновки для вирішення складних питань.</p>
+<h3 id="Контекст"><a class="header" href="#Контекст"><span id = "context">Контекст</span></a></h3>
+<p>Цей документ описує вимоги та рекомендації для розробки інформаційної системи, призначеної для організації та управління експертними опитуваннями. Він встановлює ключові функціональні можливості, методи опитувань та підходи до оцінки експертних висновків та служить базою для створення системи, яка автоматизує процеси збору, обробки та аналізу експертних думок.</p>
+<h3 id="Основні-визначення-та-скорочення"><a class="header" href="#Основні-визначення-та-скорочення"><span id = "glossary">Основні визначення та скорочення</span></a></h3>
+<ol>
+<li>
+<p>Предметна область - це сукупність об'єктів, понять та процесів, які пов'язані з певною сферою людської діяльності чи знання</p>
+</li>
+<li>
+<p>Зацікавлені особи (stakeholders) - фізичні та юридичні особи, які мають легітимний інтерес у діяльності організації, тобто певною мірою залежать від неї або можуть впливати на її діяльність.</p>
+</li>
+<li>
+<p>Бізнес-сценарій (сценарій використання, use case) - опис спостережуваної взаємодії між актором (або акторами) та рішенням, яка відбувається, коли актор використовує систему для досягнення певної мети.</p>
+</li>
+<li>
+<p>FURPS — акронім, який використовується для класифікації вимог до програмного забезпечення. Він розшифровується як:</p>
+<ul>
+<li>Functionality (Функціональність): основні функції системи, коректність, безпека.</li>
+<li>Usability (Зручність використання): інтерфейс, документація.</li>
+<li>Reliability (Надійність): частота збоїв, відмовостійкість.</li>
+<li>Performance (Продуктивність): час відгуку, ресурсомісткість.</li>
+<li>Supportability (Підтримуваність): можливість обслуговування, розширюваність, тестування.
+FURPS допомагає систематизувати як функціональні, так і нефункціональні вимоги до програмних продуктів.</li>
+</ul>
+</li>
+<li>
+<p>REST (REpresentational State Transfer, «передача репрезентативного стану») — підхід до архітектури мережевих протоколів, які надають доступ до інформаційних ресурсів.</p>
+</li>
+<li>
+<p>API (Application Programming Interface “прикладний програмний інтерфейс”) - підхід до архітектури мережевих протоколів, які надають доступ до інформаційних ресурсів.</p>
+</li>
+<li>
+<p>SOLID — це набір з п'яти принципів об'єктно-орієнтованого програмування, які допомагають розробникам створювати гнучкі та підтримувані системи:</p>
+<ul>
+<li>Single Responsibility Principle (Принцип єдиної відповідальності) — кожен клас повинен мати лише одну причину зміни.</li>
+<li>Open/Closed Principle (Принцип відкритості/закритості) — класи мають бути відкриті для розширення, але закриті для модифікації.</li>
+<li>Liskov Substitution Principle (Принцип підстановки Барбари Лисков) - підкласи повинні замінювати батьківські класи без порушення функціональності.</li>
+<li>Interface Segregation Principle (Принцип поділу інтерфейсу) — клієнти не повинні залежати від інтерфейсів, які вони не використовують.</li>
+<li>Dependency Inversion Principle (Принцип інверсії залежностей) — високорівневі модулі не повинні залежати від низькорівневих, обидві групи мають залежати від абстракцій.</li>
+</ul>
+</li>
+<li>
+<p>DRY (Don`t Repeat Yourself) - це принцип розробки програмного забезпечення, націлений на зниження повторення різного роду інформації, особливо в системах з безліччю шарів абстрагування</p>
+</li>
+<li>
+<p>KISS (Keep It Simple Stupid) - процес і принцип проектування, при якому простота системи декларується як основна мета та/або цінність.</p>
+</li>
+</ol>
+<h2 id="Характеристика-ділових-процесів"><a class="header" href="#Характеристика-ділових-процесів"><span id = "processes">Характеристика ділових процесів</span></a></h2>
+<h3 id="Процес-1-Створення-опитування"><a class="header" href="#Процес-1-Створення-опитування">Процес 1: Створення опитування</a></h3>
+<div class="table-wrapper"><table><thead><tr><th><strong>ID</strong></th><th>SurveyCreation</th></tr></thead><tbody>
+<tr><td><strong>Назва</strong></td><td>Створення опитування</td></tr>
+<tr><td><strong>Учасники</strong></td><td>Адміністратор, Система</td></tr>
+<tr><td><strong>Передумови</strong></td><td>Адміністратор авторизований на платформі та має права для створення опитування.</td></tr>
+<tr><td><strong>Результат</strong></td><td>Створене нове опитування з доданими питаннями.</td></tr>
+<tr><td><strong>Виключні ситуації</strong></td><td>Недостатньо прав для створення опитування, відсутні необхідні дані (назва, опис тощо).</td></tr>
+<tr><td><strong>Основний сценарій</strong></td><td>1. Адміністратор входить на платформу. <br> 2. Вибирає опцію створення нового опитування. <br> 3. Вводить назву, опис та додає питання. <br> 4. Зберігає опитування. <br> 5. Опитування стає доступним для експертів.</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h3 id="Процес-2-Реєстрація-експерта-на-платформі"><a class="header" href="#Процес-2-Реєстрація-експерта-на-платформі">Процес 2: Реєстрація експерта на платформі</a></h3>
+<div class="table-wrapper"><table><thead><tr><th><strong>ID</strong></th><th>UserRegistration</th></tr></thead><tbody>
+<tr><td><strong>Назва</strong></td><td>Реєстрація експерта на платформі</td></tr>
+<tr><td><strong>Учасники</strong></td><td>Користувач (експерт), Система</td></tr>
+<tr><td><strong>Передумови</strong></td><td>Користувач не має акаунту на платформі.</td></tr>
+<tr><td><strong>Результат</strong></td><td>Створено акаунт експерта з підтвердженою електронною адресою та спеціалізацією.</td></tr>
+<tr><td><strong>Виключні ситуації</strong></td><td>Неправильна або вже зареєстрована електронна адреса, помилки у формі.</td></tr>
+<tr><td><strong>Основний сценарій</strong></td><td>1. Користувач заповнює реєстраційну форму. <br> 2. Підтверджує email через посилання. <br> 3. Отримує доступ до платформи.</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h3 id="Процес-3-Проходження-опитування"><a class="header" href="#Процес-3-Проходження-опитування">Процес 3: Проходження опитування</a></h3>
+<div class="table-wrapper"><table><thead><tr><th><strong>ID</strong></th><th>SurveyCompletionProcess</th></tr></thead><tbody>
+<tr><td><strong>Назва</strong></td><td>Проходження опитування</td></tr>
+<tr><td><strong>Учасники</strong></td><td>Користувач (експерт), Система</td></tr>
+<tr><td><strong>Передумови</strong></td><td>Є активне опитування, експерт зареєстрований або анонімний.</td></tr>
+<tr><td><strong>Результат</strong></td><td>Відповіді збережено в системі.</td></tr>
+<tr><td><strong>Виключні ситуації</strong></td><td>Відсутній доступ до опитування, технічні проблеми з поданням.</td></tr>
+<tr><td><strong>Основний сценарій</strong></td><td>1. Користувач відкриває опитування. <br> 2. Відповідає на питання. <br> 3. Система зберігає відповіді. <br> 4. Після завершення користувач подає відповіді.</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h3 id="Процес-4-Перегляд-результатів-опитування"><a class="header" href="#Процес-4-Перегляд-результатів-опитування">Процес 4: Перегляд результатів опитування</a></h3>
+<div class="table-wrapper"><table><thead><tr><th><strong>ID</strong></th><th>SurveyResultsReview</th></tr></thead><tbody>
+<tr><td><strong>Назва</strong></td><td>Перегляд результатів опитування</td></tr>
+<tr><td><strong>Учасники</strong></td><td>Адміністратор, Експерт</td></tr>
+<tr><td><strong>Передумови</strong></td><td>Опитування завершено з достатньою кількістю відповідей.</td></tr>
+<tr><td><strong>Результат</strong></td><td>Згенеровано звіт з результатами.</td></tr>
+<tr><td><strong>Виключні ситуації</strong></td><td>Відсутні відповіді для аналізу, технічні проблеми з відображенням результатів.</td></tr>
+<tr><td><strong>Основний сценарій</strong></td><td>1. Система агрегує відповіді. <br> 2. Генерується звіт. 3. Користувач обирає спосіб отримання результату (завантажити pdf/надіслати на пошту). <br> 4. Результат надходить до користувача. <br><br> *Адміністратор може переглянути звіт у адмін-панелі.</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h3 id="Процес-5-Редагування-опитування"><a class="header" href="#Процес-5-Редагування-опитування">Процес 5: Редагування опитування</a></h3>
+<div class="table-wrapper"><table><thead><tr><th><strong>ID</strong></th><th>SurveyEditing</th></tr></thead><tbody>
+<tr><td><strong>Назва</strong></td><td>Редагування опитування</td></tr>
+<tr><td><strong>Учасники</strong></td><td>Адміністратор, Система</td></tr>
+<tr><td><strong>Передумови</strong></td><td>Існуюче опитування, яке ще не завершено.</td></tr>
+<tr><td><strong>Результат</strong></td><td>Опитування відредаговане, зміни збережено.</td></tr>
+<tr><td><strong>Виключні ситуації</strong></td><td>Опитування вже запущено або завершено, адміністратор не має прав на редагування.</td></tr>
+<tr><td><strong>Основний сценарій</strong></td><td>1. Адміністратор вибирає опитування для редагування. <br> 2. Вносить зміни до деталей або питань. <br> 3. Зберігає зміни. <br> 4. Система оновлює опитування.</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h3 id="Процес-6-Оцінка-опитування"><a class="header" href="#Процес-6-Оцінка-опитування">Процес 6: Оцінка опитування</a></h3>
+<div class="table-wrapper"><table><thead><tr><th><strong>ID</strong></th><th>SurveyReviewByExpertProcess</th></tr></thead><tbody>
+<tr><td><strong>Назва</strong></td><td>Оцінка опитування</td></tr>
+<tr><td><strong>Учасники</strong></td><td>Користувач (експерт), Система</td></tr>
+<tr><td><strong>Передумови</strong></td><td>Користувач завершив опитування та авторизований.</td></tr>
+<tr><td><strong>Результат</strong></td><td>Відгук збережено та доступний адміністратору.</td></tr>
+<tr><td><strong>Виключні ситуації</strong></td><td>Відгук не збережено через технічні проблеми, користувач не має прав залишити відгук.</td></tr>
+<tr><td><strong>Основний сценарій</strong></td><td>1. Користувач завершує опитування. <br> 2. Залишає відгук та оцінку. <br> 3. Система зберігає відгук. <br> 4. Адміністратор може переглядати відгуки.</td></tr>
+</tbody></table>
+</div>
+<h2 id="Короткий-огляд-продукту"><a class="header" href="#Короткий-огляд-продукту"><span id = "describe">Короткий огляд продукту</span></a></h2>
+<h3 id="1-Експерти"><a class="header" href="#1-Експерти">1. Експерти</a></h3>
+<p><strong>Опис:</strong><br />
+Експерти – це фахівці з конкретної галузі, які мають досвід і знання, що можуть бути корисними для проведення опитувань. Вони можуть представляти різні сектори: науку, бізнес, освіту, медицину тощо.</p>
+<p><strong>Потреби:</strong></p>
+<ul>
+<li><strong>Зручність використання:</strong> Інтуїтивно зрозумілий інтерфейс, який дозволяє легко брати участь в опитуваннях.</li>
+<li><strong>Анонімність:</strong> Можливість давати відповіді анонімно, щоб забезпечити чесність та відкритість.</li>
+<li><strong>Часова гнучкість:</strong> Можливість заповнювати опитування у зручний час.</li>
+<li><strong>Зворотний зв'язок:</strong> Інформація про результати опитувань, щоб відчувати, що їхні думки враховуються.</li>
+</ul>
+<h3 id="2-Організатори-опитувань"><a class="header" href="#2-Організатори-опитувань">2. Організатори опитувань</a></h3>
+<p><strong>Опис:</strong><br />
+Це особи або команди, які розробляють, реалізують і керують опитуваннями. Вони можуть працювати в академічних установах, дослідницьких компаніях або організаціях, що займаються консалтингом.</p>
+<p><strong>Потреби:</strong></p>
+<ul>
+<li><strong>Інструменти для створення опитувань:</strong> Легкий доступ до шаблонів і можливість налаштування питань.</li>
+<li><strong>Управління запрошеннями:</strong> Можливість легко запрошувати експертів через електронну пошту або інші канали.</li>
+<li><strong>Моніторинг:</strong> Інструменти для відстеження участі експертів і статусу заповнення опитувань.</li>
+<li><strong>Аналіз результатів:</strong> Функції для швидкого перегляду та аналізу зібраних даних, включаючи графіки та діаграми.</li>
+</ul>
+<h3 id="3-Аналізатори-даних"><a class="header" href="#3-Аналізатори-даних">3. Аналізатори даних</a></h3>
+<p><strong>Опис:</strong><br />
+Це спеціалісти, які обробляють та аналізують дані, отримані з опитувань. Вони можуть працювати в дослідницьких організаціях або великих компаніях.</p>
+<p><strong>Потреби:</strong></p>
+<ul>
+<li><strong>Доступ до звітів:</strong> Можливість генерувати звіти з даними, представленими в зрозумілому форматі.</li>
+<li><strong>Експорт даних:</strong> Інструменти для експорту даних в різних форматах (Excel, CSV, PDF) для подальшого аналізу.</li>
+<li><strong>Статистичні інструменти:</strong> Інтеграція з програмами для статистичного аналізу (наприклад, SPSS, R) для глибшого аналізу.</li>
+</ul>
+<h3 id="4-Менеджери-проектів"><a class="header" href="#4-Менеджери-проектів">4. Менеджери проектів</a></h3>
+<p><strong>Опис:</strong><br />
+Ці користувачі відповідають за загальну координацію та управління проектами, пов'язаними з опитуваннями. Вони можуть працювати в різних секторах, таких як бізнес, наука або освіта.</p>
+<p><strong>Потреби:</strong></p>
+<ul>
+<li><strong>Огляд статусу:</strong> Панель управління для моніторингу прогресу опитувань, термінів виконання завдань і участі експертів.</li>
+<li><strong>Управління термінами:</strong> Календар для планування важливих дат і дедлайнів.</li>
+<li><strong>Комунікація:</strong> Інструменти для зв'язку з організаторами та експертами, щоб забезпечити ефективну співпрацю.</li>
+</ul>
+<h3 id="5-it-персонал"><a class="header" href="#5-it-персонал">5. IT-персонал</a></h3>
+<p><strong>Опис:</strong><br />
+Фахівці, відповідальні за технічну підтримку системи. Вони можуть бути частиною внутрішньої команди або зовнішніх постачальників послуг.</p>
+<p><strong>Потреби:</strong></p>
+<ul>
+<li><strong>Управління базами даних:</strong> Інструменти для моніторингу та підтримки бази даних, що зберігає результати опитувань.</li>
+<li><strong>Безпека:</strong> Забезпечення захисту даних експертів і конфіденційності інформації.</li>
+<li><strong>Технічна підтримка:</strong> Швидка реакція на проблеми, що виникають, та навчання користувачів.</li>
+</ul>
+<h3 id="6-Замовники-опитувань"><a class="header" href="#6-Замовники-опитувань">6. Замовники опитувань</a></h3>
+<p><strong>Опис:</strong><br />
+Це організації або окремі особи, які ініціюють опитування для отримання експертних висновків. Вони можуть бути представниками бізнесу, науки або державних установ.</p>
+<p><strong>Потреби:</strong></p>
+<ul>
+<li><strong>Налаштування опитувань:</strong> Можливість адаптувати опитування під свої специфічні потреби і цілі.</li>
+<li><strong>Отримання звітів:</strong> Легкий доступ до результатів з можливістю глибокого аналізу.</li>
+<li><strong>Оцінка ефективності:</strong> Інструменти для оцінки корисності отриманих даних для прийняття рішень.</li>
+</ul>
+<h2 id="Функціональність"><a class="header" href="#Функціональність"><span id = "functionality">Функціональність</span></a></h2>
+<h3 id="Функціональність-для-користувача-експерта"><a class="header" href="#Функціональність-для-користувача-експерта">Функціональність для користувача (експерта)</a></h3>
+<ol>
+<li>
+<p><strong>Реєстрація та вхід:</strong></p>
+<ul>
+<li>Можливість створення облікового запису та входу в систему.</li>
+<li>Відновлення пароля.</li>
+</ul>
+</li>
+<li>
+<p><strong>Участь в опитуваннях:</strong></p>
+<ul>
+<li>Отримання запрошень на участь в опитуваннях через електронну пошту.</li>
+<li>Легкий доступ до активних опитувань.</li>
+<li>Заповнення опитувань у зручному для себе темпі.</li>
+</ul>
+</li>
+<li>
+<p><strong>Анонімність:</strong></p>
+<ul>
+<li>Можливість залишити анонімні відповіді.</li>
+<li>Інформування про використання даних.</li>
+</ul>
+</li>
+<li>
+<p><strong>Перегляд результатів:</strong></p>
+<ul>
+<li>Доступ до зведених результатів попередніх опитувань.</li>
+<li>Можливість отримувати зворотний зв'язок щодо своїх відповідей.</li>
+</ul>
+</li>
+<li>
+<p><strong>Особистий кабінет:</strong></p>
+<ul>
+<li>Перегляд історії участі в опитуваннях.</li>
+<li>Налаштування профілю (персональна інформація, уподобання).</li>
+</ul>
+</li>
+</ol>
+<h3 id="Функціональність-для-адміністратора-організатора-опитувань"><a class="header" href="#Функціональність-для-адміністратора-організатора-опитувань">Функціональність для адміністратора (організатора опитувань)</a></h3>
+<ol>
+<li>
+<p><strong>Управління користувачами:</strong></p>
+<ul>
+<li>Додавання, редагування та видалення облікових записів експертів.</li>
+<li>Управління ролями та доступом користувачів.</li>
+</ul>
+</li>
+<li>
+<p><strong>Створення та налаштування опитувань:</strong></p>
+<ul>
+<li>Інструменти для створення нових опитувань із використанням шаблонів або налаштувань.</li>
+<li>Налаштування типів питань (вибір, відкриті питання, шкали оцінювання).</li>
+</ul>
+</li>
+<li>
+<p><strong>Управління запрошеннями:</strong></p>
+<ul>
+<li>Надсилання запрошень на участь в опитуваннях.</li>
+<li>Відстеження статусу запрошень (надіслано, прийнято, відмовлено).</li>
+</ul>
+</li>
+<li>
+<p><strong>Моніторинг та аналіз:</strong></p>
+<ul>
+<li>Панель моніторингу для відстеження участі експертів.</li>
+<li>Генерація звітів з результатами опитувань.</li>
+<li>Візуалізація даних (графіки, діаграми).</li>
+</ul>
+</li>
+<li>
+<p><strong>Налаштування системи:</strong></p>
+<ul>
+<li>Керування налаштуваннями платформи (повідомлення, інтерфейс).</li>
+<li>Встановлення параметрів безпеки та конфіденційності.</li>
+</ul>
+</li>
+<li>
+<p><strong>Технічна підтримка:</strong></p>
+<ul>
+<li>Надання підтримки користувачам у разі виникнення проблем.</li>
+<li>Моніторинг технічних питань та їх вирішення.</li>
+</ul>
+</li>
+</ol>
+<h2 id="Практичність"><a class="header" href="#Практичність"><span id = "usability">Практичність</span></a></h2>
+<ol>
+<li>
+<p><strong>Інтуїтивний інтерфейс</strong>; користувач не повинен зіткунтися з проблемою створення хоча б простих опитуваннь</p>
+</li>
+<li>
+<p><strong>Кастомізація</strong>; необхідно забезпечити можливість змінювати дизайн опитувань згідно з дизайн-кодом організації або уподобаннь користувачів</p>
+</li>
+<li>
+<p><strong>Підтримка різних засобів опитувань</strong>; користувач або організація повинен мати можливість створювати різні види опитувань (обрати зі списку, оцінка за шкалою, текстова відповідь тощо)</p>
+</li>
+<li>
+<p><strong>Підтримка якомога більших платформ</strong>; для максимального охвату користувачів сервіс має коректно працювати на максимально можливій кількості платформ та браузерів</p>
+</li>
+<li>
+<p><strong>Підтримка якомога більших мов</strong>; для макимального охвату користувачів сервіс повинен надавати можливість створювати опитування на зручній для учасника опитування мові</p>
+</li>
+<li>
+<p><strong>Підтримка користувачів або організацій</strong></p>
+</li>
+</ol>
+<ul>
+<li>максимально швидка технічна підтримка через вбудований чат, електронну пошту або телефон;</li>
+<li>надання користувачас навчальних матеріалів та FAQ</li>
+</ul>
+<ol start="7">
+<li><strong>Візуалізація, аналітка та експорт даних</strong>;</li>
+</ol>
+<ul>
+<li>можливість відображення отриманної з опитувань інформації за певними правилами (графіки та діаграми);</li>
+<li>експорт статистичних даних у форматі .csv, .pdf, .json тощо, або засобами REST API</li>
+</ul>
+<h2 id="Надійність"><a class="header" href="#Надійність"><span id = "reliability">Надійність</span></a></h2>
+<ol>
+<li>
+<p><strong>Швидкодія сервісу</strong>; стабільно малий час реакції незалежно від рівня навантаження на систему</p>
+</li>
+<li>
+<p><strong>Безпека та конфіденційність</strong></p>
+</li>
+</ol>
+<ul>
+<li>викорситання протоколів шифрувань при передачі даних з/на сервер;</li>
+<li>регулярні оновлення безпеки для захисту від погроз та вразливовістей;</li>
+<li>розділення прав для різних категорій користувачів</li>
+</ul>
+<ol start="3">
+<li>
+<p><strong>Безпека зберігання даних</strong>; регулярне та автоматичне створення резервних копій та їх зберігання на локальних носіях</p>
+</li>
+<li>
+<p><strong>можливість масштабування</strong>; пітримка можливості вертикального та горизонтального масштабування системи для підтримки зростаючій кількості користувачів, опитуваннь та їх учасників</p>
+</li>
+<li>
+<p><strong>Відповідність стандартів відповідності щодо надійності та безпеки системи</strong>; система повинна відповідати місцевим стандартам надійності та конфіденційності для можливості роботи в певних країнах</p>
+</li>
+<li>
+<p><strong>Feedback від користувачів</strong>; користувачі та учасники опитувань повинні мати можливість відправляти відгуки, пропозиції, звіти о несправностях</p>
+</li>
+</ol>
+<h2 id="Продуктивність"><a class="header" href="#Продуктивність"><span id = "performance">Продуктивність</span></a></h2>
+<ol>
+<li>
+<p><strong>Мінімізоване використання системних ресурсів</strong></p>
+</li>
+<li>
+<p><strong>Використання оптимізованих SQL скриптів</strong></p>
+</li>
+<li>
+<p><strong>Мінімальна швидкість реагування на запити завдяки RESTFull архітектурі</strong></p>
+</li>
+<li>
+<p><strong>Мінімалізований дизайн та інтерфейся, який в свою чергу не потребує додаткових відео-ресурсів</strong></p>
+</li>
+</ol>
+<h2 id="Експлуатаційна-придатність"><a class="header" href="#Експлуатаційна-придатність"><span id = "supportability">Експлуатаційна придатність</span></a></h2>
+<ol>
+<li>
+<p><strong>Регулярні оновлення та виправлення недоліків системи</strong></p>
+</li>
+<li>
+<p><strong>Постійна підтримка та моніторинг роботи системи</strong></p>
+</li>
+<li>
+<p><strong>Деталізована документація системи для швидкого ознайомлення та розуміння роботи системи</strong></p>
+</li>
+<li>
+<p><strong>Відкритий вихідний код</strong></p>
+</li>
+</ol>
+<h2 id="Короткий-зміст"><a class="header" href="#Короткий-зміст">Короткий зміст</a></h2>
+<ul>
+<li>
+<p><a href="#introduction"><strong>Вступ</strong></a></p>
+<ul>
+<li><a href="#target">Мета</a></li>
+<li><a href="#context">Контекст</a></li>
+<li><a href="#glossary">Основні визначення та скорочення</a></li>
+<li><a href="#links">Посилання</a></li>
+</ul>
+</li>
+<li>
+<p><a href="#processes"><strong>Характеристика ділових процесів</strong></a></p>
+</li>
+<li>
+<p><a href="#describe"><strong>Короткий огляд продукту</strong></a></p>
+</li>
+<li>
+<p><a href="#functionality"><strong>Функціональність</strong></a></p>
+</li>
+<li>
+<p><a href="#usability"><strong>Практичність</strong></a></p>
+</li>
+<li>
+<p><a href="#reliability"><strong>Надійність</strong></a></p>
+</li>
+<li>
+<p><a href="#performance"><strong>Продуктивність</strong></a></p>
+</li>
+<li>
+<p><a href="#supportability"><strong>Експлуатаційна придатність</strong></a></p>
+</li>
+</ul>
+<h2 id="Посилання"><a class="header" href="#Посилання">Посилання</a></h2>
+<h3 id=""><a class="header" href="#"><span id = "links"></span></a></h3>
+<ol>
+<li><a href="https://uk.wikipedia.org/wiki/%D0%9F%D1%80%D0%B5%D0%B4%D0%BC%D0%B5%D1%82%D0%BD%D0%B0_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C#cite_note-1">Предметна область</a></li>
+<li><a href="http://www.market-infr.od.ua/journals/2021/62_2021/3.pdf">Ворончак І. Соціальна відповідальність бізнесу як соціально-економічний феномен // Відповідальна економіка. — 2009. — № 1. — С. 90–103.</a></li>
+<li><a href="https://www.iiba.org/globalassets/standards-and-resources/glossary/files/babok-v3-glossary-ukrainian.pdf">BABOK® Guide v3 Glossary - Ukrainian Translation. Український переклад Додатку А: Глосарій до BABOK® Guide v3</a></li>
+<li><a href="https://uk.wikipedia.org/wiki/FURPS">FURPS</a></li>
+<li><a href="https://uk.wikipedia.org/wiki/REST">REST</a></li>
+<li><a href="https://uk.wikipedia.org/wiki/%D0%9F%D1%80%D0%B8%D0%BA%D0%BB%D0%B0%D0%B4%D0%BD%D0%B8%D0%B9_%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BD%D0%B8%D0%B9_%D1%96%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81">API</a></li>
+<li><a href="https://en.wikipedia.org/wiki/SOLID">SOLID</a></li>
+<li><a href="https://ru.wikipedia.org/wiki/Don%E2%80%99t_repeat_yourself">DRY</a></li>
+<li><a href="https://uk.wikipedia.org/wiki/%D0%9F%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF_%C2%ABKISS%C2%BB">KISS</a></li>
+</ol>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../../docs/requirements/state-of-the-art.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../../docs/use_cases/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../../docs/requirements/state-of-the-art.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../../docs/use_cases/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

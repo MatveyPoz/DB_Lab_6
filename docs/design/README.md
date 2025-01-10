@@ -3,6 +3,7 @@
  
 ## Модель бізнес-об'єктів
 
+```plantuml
 @startuml
 
 entity Permission #14f749
@@ -64,9 +65,11 @@ Result.description --* Result
 Result.name --* Result
 Servey.result -u- Result
 
-@enduml 
+@enduml
+``` 
 
 ## ER-модель
+```plantuml
 @startuml
 
 entity Permission {
@@ -131,6 +134,7 @@ Question -- "1..*" UserAnswer : isAnsweredIn
 
 
 @enduml
+```
 
 ##  Реляційна схема
 
