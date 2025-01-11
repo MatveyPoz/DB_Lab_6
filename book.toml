@@ -3,6 +3,11 @@ language = "uk"
 multilingual = false
 src = "docs"
 
+[book]
+language = "uk"
+multilingual = false
+src = "docs"
+
 # Замініть авторство проєкта на своє
 authors = ["Pozdieiev Matvii"]
 
